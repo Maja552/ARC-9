@@ -90,6 +90,23 @@ function SWEP:ApplyRecoil()
     recoilup = recoilup * (pvrec or 0)
     recoilside = recoilside * (pvrec or 0)
 
+    if IsValid(self:GetOwner()) then
+        local character = self:GetOwner():GetCharacter()
+        if character then
+            for k,v in pairs(ix.attributes.list) do
+                if k == "weapon" then
+                    if v.CalculateRecoil then
+                       --local old_recoilup = recoilup
+                        recoilup = v.CalculateRecoil(character, recoilup)
+                        recoilside = v.CalculateRecoil(character, recoilside)
+                        
+                    end
+                    break
+                end
+            end
+        end
+    end
+
     self:SetRecoilUp(recoilup)
     self:SetRecoilSide(recoilside)
 

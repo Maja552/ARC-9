@@ -93,6 +93,19 @@ function SWEP:DrawLaser(pos, dir, atttbl, behav)
 
         render.DrawSprite(hitpos, rad, rad, dotcolor)
         render.DrawSprite(hitpos, rad * 0.4, rad * 0.3, whitedotcolor)
+
+        -- Create dynamic light at hit position
+        local dlight = DynamicLight(self:EntIndex())
+        if (dlight) then
+            dlight.pos = hitpos
+            dlight.r = color.r
+            dlight.g = color.g
+            dlight.b = color.b
+            dlight.brightness = 1
+            dlight.Decay = 1000
+            dlight.Size = 100
+            dlight.DieTime = CurTime() + 0.1
+        end
     end
 end
 
@@ -153,11 +166,26 @@ function SWEP:DrawLasers(wm, behav)
                 lasang:RotateAroundAxis(forward, lasercorrectionangle.r)
             end
 
-			local color = atttbl.LaserColor or lasercolorred
-			local colorplayer = !owner:IsNPC() and owner:GetWeaponColor():ToColor()
+            local color = atttbl.LaserColor or lasercolorred
+            local colorplayer = !owner:IsNPC() and owner:GetWeaponColor():ToColor()
 
-			if (atttbl.LaserColorPlayer or atttbl.LaserPlayerColor) then color = colorplayer or color end
-			
+            if (atttbl.LaserColorPlayer or atttbl.LaserPlayerColor) then color = colorplayer or color end
+            
+            -- Draw dynamic light
+           -- if atttbl.LaserLight then
+                local light = DynamicLight((slottbl.Address or 0) + 69)
+                if light then
+                    light.Pos = a.Pos
+                    light.r = color.r
+                    light.g = color.g
+                    light.b = color.b
+                    light.Brightness = 1
+                    light.Size = 100
+                    light.Decay = 1000
+                    light.DieTime = CurTime() + 0.1
+                end
+            --end
+
             self:DrawLightFlare(a.Pos, lasang, color, wm and 5 or 10, (slottbl.Address or 0) + 69, !wm)
 
             if !wm or owner == LocalPlayer() or wm and owner:IsNPC() then

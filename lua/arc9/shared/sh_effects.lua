@@ -1,6 +1,5 @@
 
 game.AddParticles( "particles/muzzleflashes_test.pcf" )
---game.AddParticles( "particles/muzzleflashes_test_b.pcf" ) -- Why and What is this?
 game.AddParticles( "particles/fas_explosions.pcf" )
 
 PrecacheParticleSystem( "muzzleflash_1" )

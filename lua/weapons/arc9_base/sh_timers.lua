@@ -82,6 +82,20 @@ function SWEP:PlaySoundTable(soundtable, mult)
 
         if v.t then
             ttime = v.t * mult
+
+            if IsValid(self:GetOwner()) then
+                local character = self:GetOwner():GetCharacter()
+                if character then
+                    for k2,v2 in pairs(ix.attributes.list) do
+                        if k2 == "weapon" then
+                            if v2.CalculateAnimTime then
+                                v.t = v2.CalculateAnimTime(character, "-", v.t)
+                            end
+                            break
+                        end
+                    end
+                end
+            end
         else
             continue
         end

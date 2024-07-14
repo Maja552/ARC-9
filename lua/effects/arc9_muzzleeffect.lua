@@ -83,10 +83,22 @@ function EFFECT:Init(data)
             light.r = clr.r
             light.g = clr.g
             light.b = clr.b
-            light.Brightness = 2
+
+            if(wpn.ShotDynamicLightBrightness) then
+                light.Brightness = wpn.ShotDynamicLightBrightness
+            else
+                light.Brightness = 3
+            end
+
             light.Decay = 2500
-            light.Size = wpn:GetOwner() == LocalPlayer() and 256 or 128
-            light.DieTime = CurTime() + 0.1
+
+            if(wpn.ShotDynamicLightSize) then
+                light.Size = wpn.ShotDynamicLightSize
+            else
+                light.Size = wpn:GetOwner() == LocalPlayer() and 256 or 128
+            end
+
+            light.DieTime = CurTime() + 0.015
         end
     end
 
