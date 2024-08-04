@@ -25,8 +25,8 @@ function ARC9.Move(ply, mv, cmd)
     mv:SetMaxClientSpeed(basespd * mult)
 
     if wpn:GetInMeleeAttack() and wpn:GetLungeEntity():IsValid() then
-        mv:SetMaxSpeed(10000)
-        mv:SetMaxClientSpeed(10000)
+        --mv:SetMaxSpeed(10000)
+        --mv:SetMaxClientSpeed(10000)
         local targetpos = wpn:GetLungeEntity():EyePos()
         targetpos.z = math.min(targetpos.z, ply:EyePos().z) --wontt make you jump if you attack while in crouch
         local lungevec = targetpos - ply:EyePos()
@@ -54,11 +54,12 @@ function ARC9.Move(ply, mv, cmd)
             wpn:PlayAnimation("toggle")
         end
     end
-end
 
+    return ply, mv, cmd
+end
 hook.Add("SetupMove", "ARC9.SetupMove", ARC9.Move)
 
-ARC9.RecoilTimeStep = 0.03
+ARC9.RecoilTimeStep = 0.01
 
 ARC9.ClientRecoilTime = 0
 
@@ -222,10 +223,6 @@ function ARC9.StartCommand(ply, cmd)
 
     if wpn:GetProcessedValue("NoSprintWhenLocked", true) and wpn:GetAnimLockTime() > CurTime() then
         cmd:RemoveKey(IN_SPEED)
-    end
-
-    if wpn.InertiaEnabled then
-        wpn.InertiaSideMoveRaw = cmd:GetSideMove() * 0.0015
     end
 
     local eyeang = cmd:GetViewAngles()

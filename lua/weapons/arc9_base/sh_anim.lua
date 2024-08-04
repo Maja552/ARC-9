@@ -75,6 +75,20 @@ function SWEP:PlayAnimation(anim, mult, lock, delayidle, noproxy, notranslate, n
     if IsValid(mdl) then
         time = animation.Time or mdl:SequenceDuration(seq)
 
+        if IsValid(self:GetOwner()) then
+            local character = self:GetOwner():GetCharacter()
+            if character then
+                for k,v in pairs(ix.attributes.list) do
+                    if k == "weapon" then
+                        if v.CalculateAnimTime then
+                            time = v.CalculateAnimTime(character, anim, time)
+                        end
+                        break
+                    end
+                end
+            end
+        end
+
         mult = mult * (animation.Mult or 1)
 
         if animation.Reverse then

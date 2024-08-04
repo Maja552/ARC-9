@@ -555,6 +555,21 @@ local fireBullets = {}
 local black = Color(0,0,0) -- if anything, let's just safe ourselves.
 
 function SWEP:DoProjectileAttack(pos, ang, spread)
+    if IsValid(self:GetOwner()) then
+        local character = self:GetOwner():GetCharacter()
+        if character then
+            for k,v in pairs(ix.attributes.list) do
+                if k == "weapon" then
+                    if v.CalculateSpread then
+                        local old_spread = spread
+                        spread = v.CalculateSpread(character, spread)
+                    end
+                    break
+                end
+            end
+        end
+    end
+
     if self:GetProcessedValue("ShootEnt", true) then
         self:ShootRocket()
     else
@@ -712,7 +727,7 @@ function SWEP:AfterShotFunction(tr, dmg, range, penleft, alreadypenned, secondar
     -- Limb multipliers
     local traceEntity = tr.Entity
     local hitGroup = tr.HitGroup
-    
+
     if !ARC9.NoBodyPartsDamageMults then
         local bodydamage = self:GetProcessedValue("BodyDamageMults", true)
 

@@ -107,7 +107,11 @@ function SWEP:Think()
             local burstCount = swepDt.BurstCount
             if burstCount >= currentFiremode and currentFiremode > 0 then
                 self:SetBurstCount(0)
-                weaponSetNextPrimaryFire(self, postBurstDelay)
+                if currentFiremode == 1 then
+                    weaponSetNextPrimaryFire(self, 0.01)
+                else
+                    weaponSetNextPrimaryFire(self, postBurstDelay)
+                end
             elseif burstCount > 0 and burstCount < currentFiremode then
                 swepDoPrimaryAttack(self)
             end
@@ -216,7 +220,7 @@ function SWEP:Think()
                 end
             end)
         end
-        if isSingleplayer and self.IsQuickGrenade then owner.ARC9LastSelectedGrenade = self:GetClass() end
+        if game.SinglePlayer() and self.IsQuickGrenade then owner.ARC9LastSelectedGrenade = self:GetClass() end
     end
 end
 
